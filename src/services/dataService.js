@@ -3,14 +3,14 @@
  */
 
 // Import mock data
-import mockData from '../data/mockData.json';
+import { initialMockData } from '../data/mockData';
 
 /**
  * Get all objects from the mock data
  * @returns {Array} Array of objects
  */
 export const getAllObjects = () => {
-  return mockData.objects;
+  return initialMockData.objects;
 };
 
 /**
@@ -19,7 +19,7 @@ export const getAllObjects = () => {
  * @returns {Object|null} The object or null if not found
  */
 export const getObjectById = (id) => {
-  return mockData.objects.find(obj => obj.id === id) || null;
+  return initialMockData.objects.find(obj => obj.id === id) || null;
 };
 
 /**
@@ -29,17 +29,17 @@ export const getObjectById = (id) => {
  * @returns {Object} The updated object
  */
 export const updateObjectPosition = (id, position) => {
-  const objectIndex = mockData.objects.findIndex(obj => obj.id === id);
+  const objectIndex = initialMockData.objects.findIndex(obj => obj.id === id);
   if (objectIndex === -1) return null;
   
   // In a real app, this would update a database or state management store
   // For this mock, we'll update the object in memory
-  mockData.objects[objectIndex] = {
-    ...mockData.objects[objectIndex],
+  initialMockData.objects[objectIndex] = {
+    ...initialMockData.objects[objectIndex],
     ...position
   };
   
-  return mockData.objects[objectIndex];
+  return initialMockData.objects[objectIndex];
 };
 
 /**

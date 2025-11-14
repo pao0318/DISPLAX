@@ -10,7 +10,7 @@
       "y": 0.3,
       "angle": 0,
       "color": "#06b6d4",
-      "icon": "hospital",
+      "icon": "Car",
       "options": [
         { "id": 1, "label": "Patient Records", "description": "Access and manage patient medical history" },
         { "id": 2, "label": "Medical Billing", "description": "Process insurance claims and payments" },
@@ -26,7 +26,7 @@
       "y": 0.6,
       "angle": 0,
       "color": "#0ea5e9",
-      "icon": "bank",
+      "icon": "coffee",
       "options": [
         { "id": 1, "label": "Flexible Credit", "description": "Personalized loan options" },
         { "id": 2, "label": "Smart Mobility", "description": "Transportation financing solutions" },
@@ -42,7 +42,7 @@
       "y": 0.7,
       "angle": 0,
       "color": "#0891b2",
-      "icon": "store",
+      "icon": "cart",
       "options": [
         { "id": 1, "label": "Inventory Management", "description": "Track and optimize product inventory" },
         { "id": 2, "label": "Customer Insights", "description": "Analyze customer behavior and preferences" },
@@ -58,7 +58,7 @@
       "y": 0.4,
       "angle": 0,
       "color": "#0e7490",
-      "icon": "gas",
+      "icon": "petrolpump",
       "options": [
         { "id": 1, "label": "Fuel Analytics", "description": "Monitor and optimize fuel consumption" },
         { "id": 2, "label": "Fleet Management", "description": "Track and manage vehicle fleets" },
