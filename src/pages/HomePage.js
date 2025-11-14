@@ -9,7 +9,7 @@ const HomePage = () => {
   const navigate = useNavigate();
 
   const handleBeginClick = () => {
-    navigate('/canvas');
+    navigate('/place-device');
   };
 
   return (

@@ -1,0 +1,213 @@
+/* ConsentPage Styles */
+
+.consent-page {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #1a1a1a;
+}
+
+/* Background */
+.consent-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.consent-background img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.3;
+}
+
+/* Overlay */
+.consent-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(20, 30, 40, 0.5) 50%, rgba(0, 0, 0, 0.4) 100%);
+  z-index: 1;
+}
+
+/* Content container */
+.consent-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+}
+
+/* Waveform */
+.waveform-container {
+  width: 300px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.waveform {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 10px rgba(6, 182, 212, 0.8));
+}
+
+.waveform-path {
+  fill: none;
+  stroke: #06b6d4;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  animation: waveAnimation 2s ease-in-out infinite;
+}
+
+@keyframes waveAnimation {
+  0% {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+  }
+  50% {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: -1000;
+  }
+}
+
+/* Question */
+.consent-question {
+  font-size: 32px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+/* Buttons container */
+.consent-buttons {
+  display: flex;
+  gap: 40px;
+  margin-top: 20px;
+}
+
+/* Button styles */
+.consent-btn {
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;
+  min-height: 120px;
+}
+
+.consent-btn-img {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  transition: all 0.3s ease;
+}
+
+.consent-yes {
+  filter: drop-shadow(0 0 10px rgba(6, 182, 212, 0.5));
+}
+
+.consent-yes:hover .consent-btn-img {
+  filter: drop-shadow(0 0 20px rgba(6, 182, 212, 0.8)) brightness(1.2);
+  transform: scale(1.1);
+}
+
+.consent-yes:active .consent-btn-img {
+  transform: scale(0.95);
+}
+
+.consent-no {
+  filter: drop-shadow(0 0 10px rgba(255, 107, 107, 0.5));
+}
+
+.consent-no:hover .consent-btn-img {
+  filter: drop-shadow(0 0 20px rgba(255, 107, 107, 0.8)) brightness(1.2);
+  transform: scale(1.1);
+}
+
+.consent-no:active .consent-btn-img {
+  transform: scale(0.95);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .consent-question {
+    font-size: 24px;
+  }
+
+  .consent-buttons {
+    gap: 20px;
+  }
+
+  .consent-btn {
+    min-width: 100px;
+    min-height: 100px;
+  }
+
+  .consent-btn-img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .waveform-container {
+    width: 250px;
+    height: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .consent-content {
+    gap: 30px;
+  }
+
+  .consent-question {
+    font-size: 20px;
+  }
+
+  .consent-buttons {
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .consent-btn {
+    min-width: 80px;
+    min-height: 80px;
+  }
+
+  .consent-btn-img {
+    width: 80px;
+    height: 80px;
+  }
+
+  .waveform-container {
+    width: 200px;
+    height: 80px;
+  }
+}

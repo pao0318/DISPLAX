@@ -35,8 +35,23 @@ const ObjectOptions = memo(({ object, onOptionSelect, isVisible = true, onAnimat
     if (!object || !object.options) return [];
     
     return object.options.map((option, index) => {
-      // Calculate position in a circle
-      const angle = (index / object.options.length) * Math.PI * 2;
+      // Dynamic arc logic: 5 or fewer = 270 degrees, more than 5 = 360 degrees
+      const optionCount = object.options.length;
+      let startAngle, arcAngle;
+      
+      if (optionCount <= 5) {
+        // 270-degree arc (3/4 circle) for 5 or fewer options
+        // Start from top-left (-135 degrees) and go clockwise
+        startAngle = (-3 * Math.PI) / 4; // -135 degrees (top-left)
+        arcAngle = (3 * Math.PI) / 2; // 270 degrees
+      } else {
+        // Full 360-degree circle for more than 5 options
+        startAngle = 0;
+        arcAngle = 2 * Math.PI; // 360 degrees
+      }
+      
+      // Calculate angle for this option
+      const angle = startAngle + (index / Math.max(optionCount - 1, 1)) * arcAngle;
       const radius = 100; // Distance from center
       const x = Math.cos(angle) * radius;
       const y = Math.sin(angle) * radius;
@@ -68,9 +83,7 @@ const ObjectOptions = memo(({ object, onOptionSelect, isVisible = true, onAnimat
           {/* Option label */}
           <div className="option-label absolute whitespace-nowrap bg-gray-800 px-2 py-1 rounded text-xs">
             {option.label}
-            {option.description && (
-              <div className="text-gray-400 text-xs">{option.description}</div>
-            )}
+           
           </div>
         </div>
       );
