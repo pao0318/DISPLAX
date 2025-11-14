@@ -5,8 +5,13 @@
   box-sizing: border-box;
 }
 
-body {
+html, body {
+  width: 100%;
+  height: 100%;
   overflow: hidden;
+}
+
+body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   background-color: #1a202c;
   touch-action: none; /* Prevent browser handling of touch gestures */
@@ -18,6 +23,14 @@ body {
   position: relative;
   overflow: hidden;
   will-change: transform; /* Hint to browser to optimize */
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .App {
+    width: 100%;
+    height: 100%;
+  }
 }
 
 canvas {
@@ -34,6 +47,36 @@ canvas {
   position: relative;
   width: 300px;
   height: 300px;
+}
+
+/* Portrait mode (width < height) - mobile phones */
+@media (max-aspect-ratio: 1/1) {
+  .car-center-container {
+    width: 200px;
+    height: 200px;
+  }
+  
+  .car-center-icon {
+    width: 80px !important;
+    height: 80px !important;
+  }
+  
+  .car-center-inner {
+    width: 70px !important;
+    height: 70px !important;
+  }
+  
+  .car-center-img {
+    width: 40px !important;
+    height: 40px !important;
+  }
+  
+  .car-center-glow {
+    top: -10px !important;
+    left: -10px !important;
+    right: -10px !important;
+    bottom: -10px !important;
+  }
 }
 
 .car-center-icon {
@@ -280,5 +323,58 @@ canvas {
   .option-item {
     width: 40px;
     height: 40px;
+  }
+  
+  /* Responsive options panel */
+  .fixed {
+    width: 90vw !important;
+    max-width: 90vw !important;
+    left: 5vw !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    max-height: 80vh !important;
+    overflow-y: auto !important;
+  }
+}
+
+/* Portrait mode adjustments */
+@media (max-aspect-ratio: 1/1) {
+  .option-item {
+    width: 35px !important;
+    height: 35px !important;
+    font-size: 10px !important;
+  }
+  
+  .option-label {
+    font-size: 10px !important;
+    padding: 2px 4px !important;
+  }
+  
+  /* Reduce spacing for portrait mode */
+  .absolute {
+    font-size: 12px;
+  }
+  
+  /* Help tooltip */
+  .absolute.top-4 {
+    top: 2px !important;
+    font-size: 11px !important;
+    padding: 4px 8px !important;
+  }
+  
+  /* Help button */
+  .absolute.bottom-4 {
+    bottom: 2px !important;
+    padding: 6px !important;
+  }
+  
+  .absolute.bottom-4 svg {
+    width: 16px !important;
+    height: 16px !important;
+  }
+  
+  /* EY Logo */
+  .absolute.bottom-4.right-4 {
+    width: 16px !important;
   }
 }

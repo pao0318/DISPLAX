@@ -43,6 +43,26 @@ const MapCanvas = memo(({ mapSrc }) => {
       }
     };
     
+    // Function to set canvas size based on device pixel ratio for crisp rendering
+    const setCanvasSize = () => {
+      let width = window.innerWidth;
+      let height = window.innerHeight;
+      
+      // Ensure minimum dimensions for visibility
+      width = Math.max(width, 320);
+      height = Math.max(height, 568);
+      
+      // Set canvas size directly without DPR scaling for mobile compatibility
+      canvas.width = width;
+      canvas.height = height;
+      
+      // Ensure canvas fills the viewport
+      canvas.style.width = '100%';
+      canvas.style.height = '100%';
+      
+      drawMapOnCanvas();
+    };
+    
     // Set canvas to full window size with debounced resize
     const handleResize = () => {
       // Clear any pending resize timeout
@@ -52,24 +72,33 @@ const MapCanvas = memo(({ mapSrc }) => {
       
       // Debounce resize to avoid excessive redraws
       resizeTimeoutRef.current = setTimeout(() => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        drawMapOnCanvas();
+        setCanvasSize();
         resizeTimeoutRef.current = null;
       }, 100);
     };
     
+    // Handle orientation change on mobile
+    const handleOrientationChange = () => {
+      if (resizeTimeoutRef.current) {
+        clearTimeout(resizeTimeoutRef.current);
+      }
+      resizeTimeoutRef.current = setTimeout(() => {
+        setCanvasSize();
+        resizeTimeoutRef.current = null;
+      }, 200);
+    };
+    
     // Initial setup
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    drawMapOnCanvas();
+    setCanvasSize();
     
     // Handle window resize
     window.addEventListener('resize', handleResize, { passive: true });
+    window.addEventListener('orientationchange', handleOrientationChange, { passive: true });
     
     // Cleanup
     return () => {
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener('orientationchange', handleOrientationChange);
       if (resizeTimeoutRef.current) {
         clearTimeout(resizeTimeoutRef.current);
       }
@@ -78,22 +107,43 @@ const MapCanvas = memo(({ mapSrc }) => {
   
   // Function to draw the map - extracted for reuse
   const drawMap = (canvas, mapImage) => {
-    const ctx = canvas.getContext('2d', { alpha: false }); // alpha: false for better performance
+    const ctx = canvas.getContext('2d'); 
     
-    // Use hardware acceleration when available
-    if (ctx.imageSmoothingEnabled !== undefined) {
-      ctx.imageSmoothingQuality = 'low'; // 'low', 'medium', or 'high'
+    if (!ctx) return;
+    
+    // Use image smoothing for better quality
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'medium';
+    
+    // Clear the canvas with background color
+    ctx.fillStyle = '#1a202c';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // Calculate aspect ratios for responsive scaling
+    const canvasAspect = canvas.width / canvas.height;
+    const imageAspect = mapImage.width / mapImage.height;
+    
+    let drawWidth, drawHeight, drawX, drawY;
+    
+    // Cover the entire canvas while maintaining aspect ratio
+    if (canvasAspect > imageAspect) {
+      drawWidth = canvas.width;
+      drawHeight = canvas.width / imageAspect;
+    } else {
+      drawHeight = canvas.height;
+      drawWidth = canvas.height * imageAspect;
     }
     
-    // Clear the canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // Center the image
+    drawX = (canvas.width - drawWidth) / 2;
+    drawY = (canvas.height - drawHeight) / 2;
     
     // Draw the map as background, covering the entire canvas
     ctx.globalAlpha = 0.6; // Make it slightly transparent
-    ctx.drawImage(mapImage, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(mapImage, drawX, drawY, drawWidth, drawHeight);
     ctx.globalAlpha = 1.0;
     
-    // Add a subtle overlay gradient
+    // Add a subtle overlay gradient for better readability
     const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
     gradient.addColorStop(0, 'rgba(20, 30, 40, 0.7)');
     gradient.addColorStop(1, 'rgba(40, 50, 60, 0.5)');
@@ -108,12 +158,15 @@ const MapCanvas = memo(({ mapSrc }) => {
       style={{ 
         display: 'block', 
         backgroundColor: '#1a202c', // Dark background while loading
-        position: 'absolute',
+        position: 'fixed',
         top: 0,
         left: 0,
-        width: '100%',
-        height: '100%',
-        zIndex: 0
+        width: '100vw',
+        height: '100vh',
+        zIndex: 0,
+        margin: 0,
+        padding: 0,
+        border: 'none'
       }}
     />
   );

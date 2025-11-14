@@ -5,6 +5,7 @@ import './App.css';
 import MapCanvas from './components/MapCanvas';
 import DraggableObject from './components/DraggableObject';
 import ObjectOptions from './components/ObjectOptions';
+import OptionsPanel from './components/OptionsPanel';
 
 // Import services
 import { getAllObjects, updateObjectPosition } from './services/dataService';
@@ -18,6 +19,10 @@ function App() {
   // State for center car options
   const [showCenterOptions, setShowCenterOptions] = useState(false);
   const [isAnimatingOut, setIsAnimatingOut] = useState(false);
+  
+  // State for options panel
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedObjectName, setSelectedObjectName] = useState('');
   
   // Define the main car object in the center (not part of draggable objects)
   const centerCarObject = {
@@ -97,8 +102,17 @@ function App() {
   // Handle option selection
   const handleOptionSelect = useCallback((objectId, option) => {
     console.log(`Selected ${option.label}`);
-    // Here you would handle the action for each option
-  }, []);
+    
+    // Find the object name
+    let objName = 'Car';
+    if (objectId !== 'center-car') {
+      const obj = objects.find(o => o.id === objectId);
+      objName = obj ? obj.name : 'Object';
+    }
+    
+    setSelectedOption(option);
+    setSelectedObjectName(objName);
+  }, [objects]);
   
   return (
     <div className="App">
@@ -143,6 +157,15 @@ function App() {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       </button>
+      
+      {/* Options Panel */}
+      {selectedOption && (
+        <OptionsPanel
+          option={selectedOption}
+          objectName={selectedObjectName}
+          onClose={() => setSelectedOption(null)}
+        />
+      )}
     </div>
   );
 }

@@ -21,26 +21,45 @@ const DraggableObject = memo(({ object, onDrag, onClick, isActive, options, onOp
   const lastPositionRef = useRef({ x: object.x, y: object.y });
   const [optionsVisible, setOptionsVisible] = useState(false);
   const [isAnimatingOut, setIsAnimatingOut] = useState(false);
+  const startPosRef = useRef({ x: 0, y: 0 });
+  const hasMovedRef = useRef(false);
   
-  // Handle mouse down
-  const handleMouseDown = useCallback((e) => {
+  // Handle pointer down (works for mouse, touch, and pen)
+  const handlePointerDown = useCallback((e) => {
     e.preventDefault();
     // Capture the initial click offset from the center of the object
     const rect = e.currentTarget.getBoundingClientRect();
+    const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+    const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+    
+    // Store the starting position to detect if it's a click or drag
+    startPosRef.current = { x: clientX, y: clientY };
+    hasMovedRef.current = false;
+    
     offsetRef.current = {
-      x: e.clientX - (rect.left + rect.width / 2),
-      y: e.clientY - (rect.top + rect.height / 2)
+      x: clientX - (rect.left + rect.width / 2),
+      y: clientY - (rect.top + rect.height / 2)
     };
     
     setIsDragging(true);
-    
-    // Call onClick to activate this object
-    onClick(object);
-  }, [object, onClick]);
+  }, []);
   
-  // Handle mouse move - optimized with requestAnimationFrame
-  const handleMouseMove = useCallback((e) => {
+  // Handle pointer move - optimized with requestAnimationFrame
+  const handlePointerMove = useCallback((e) => {
     if (!isDragging) return;
+    
+    const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+    const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+    
+    // Check if pointer has moved more than 5 pixels (to distinguish click from drag)
+    const dx = Math.abs(clientX - startPosRef.current.x);
+    const dy = Math.abs(clientY - startPosRef.current.y);
+    
+    if (dx > 5 || dy > 5) {
+      hasMovedRef.current = true;
+    }
+    
+    if (!hasMovedRef.current) return;
     
     // Use requestAnimationFrame to limit updates
     if (frameRef.current) {
@@ -51,8 +70,8 @@ const DraggableObject = memo(({ object, onDrag, onClick, isActive, options, onOp
       if (!objectRef.current) return;
       
       const parentRect = objectRef.current.parentElement.getBoundingClientRect();
-      const newX = (e.clientX - offsetRef.current.x - parentRect.left) / parentRect.width;
-      const newY = (e.clientY - offsetRef.current.y - parentRect.top) / parentRect.height;
+      const newX = (clientX - offsetRef.current.x - parentRect.left) / parentRect.width;
+      const newY = (clientY - offsetRef.current.y - parentRect.top) / parentRect.height;
       
       // Clamp values between 0 and 1
       const clampedX = Math.max(0, Math.min(1, newX));
@@ -70,37 +89,71 @@ const DraggableObject = memo(({ object, onDrag, onClick, isActive, options, onOp
     });
   }, [isDragging, object.id, onDrag]);
   
-  // Handle mouse up
-  const handleMouseUp = useCallback(() => {
+  // Handle pointer up
+  const handlePointerUp = useCallback(() => {
+    // If it was a click (not a drag), call onClick
+    if (!hasMovedRef.current) {
+      onClick(object);
+    }
+    
     setIsDragging(false);
     if (frameRef.current) {
       cancelAnimationFrame(frameRef.current);
       frameRef.current = null;
     }
-  }, []);
+  }, [object, onClick]);
   
-  // Add and remove event listeners
+  // Add and remove event listeners for both mouse and touch
   useEffect(() => {
     if (isDragging) {
-      document.addEventListener('mousemove', handleMouseMove, { passive: true });
-      document.addEventListener('mouseup', handleMouseUp);
+      // Mouse events
+      document.addEventListener('mousemove', handlePointerMove, { passive: true });
+      document.addEventListener('mouseup', handlePointerUp);
+      
+      // Touch events
+      document.addEventListener('touchmove', handlePointerMove, { passive: true });
+      document.addEventListener('touchend', handlePointerUp);
+      
+      // Pointer events (modern approach)
+      document.addEventListener('pointermove', handlePointerMove, { passive: true });
+      document.addEventListener('pointerup', handlePointerUp);
+      
       document.body.style.cursor = 'grabbing';
     } else {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
+      // Mouse events
+      document.removeEventListener('mousemove', handlePointerMove);
+      document.removeEventListener('mouseup', handlePointerUp);
+      
+      // Touch events
+      document.removeEventListener('touchmove', handlePointerMove);
+      document.removeEventListener('touchend', handlePointerUp);
+      
+      // Pointer events
+      document.removeEventListener('pointermove', handlePointerMove);
+      document.removeEventListener('pointerup', handlePointerUp);
+      
       document.body.style.cursor = '';
     }
     
     return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
+      // Mouse events
+      document.removeEventListener('mousemove', handlePointerMove);
+      document.removeEventListener('mouseup', handlePointerUp);
+      
+      // Touch events
+      document.removeEventListener('touchmove', handlePointerMove);
+      document.removeEventListener('touchend', handlePointerUp);
+      
+      // Pointer events
+      document.removeEventListener('pointermove', handlePointerMove);
+      document.removeEventListener('pointerup', handlePointerUp);
+      
       if (frameRef.current) {
         cancelAnimationFrame(frameRef.current);
         frameRef.current = null;
       }
-      document.body.style.cursor = '';
     };
-  }, [isDragging, handleMouseMove, handleMouseUp]);
+  }, [isDragging, handlePointerMove, handlePointerUp]);
   
   // Update position when object prop changes (but not during drag)
   useEffect(() => {
@@ -150,8 +203,9 @@ const DraggableObject = memo(({ object, onDrag, onClick, isActive, options, onOp
         ref={objectRef}
         className={`absolute rounded-full cursor-grab ${isDragging ? 'cursor-grabbing' : ''} ${isActive && !isDragging ? 'pulse' : ''}`}
         style={style}
-        onMouseDown={handleMouseDown}
-        onTouchStart={handleMouseDown}
+        onMouseDown={handlePointerDown}
+        onTouchStart={handlePointerDown}
+        onPointerDown={handlePointerDown}
       >
         <div className="flex items-center justify-center h-full w-full text-white">
           {object.icon ? (
