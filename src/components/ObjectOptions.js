@@ -12,7 +12,7 @@ const ObjectOptions = memo(({ object, onOptionSelect }) => {
     if (!object || !object.options) return [];
     
     return object.options.map((option, index) => {
-      // Calculate position in a circle
+      // Calculate position in a circl
       const angle = (index / object.options.length) * Math.PI * 2;
       const radius = 100; // Distance from center
       const x = Math.cos(angle) * radius;
