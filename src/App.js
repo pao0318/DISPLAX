@@ -6,7 +6,7 @@ function App() {
   const [activeLocation, setActiveLocation] = useState(null);
   const [showOptions, setShowOptions] = useState(false);
   
-  // Define locations with their coordinates on the map
+
   const locations = [
     { id: 1, name: 'Hospital', x: 0.7, y: 0.3, color: '#06b6d4', options: ['Patient Records', 'Medical Billing', 'Healthcare Analytics', 'Telemedicine'] },
     { id: 2, name: 'Bank', x: 0.3, y: 0.6, color: '#0ea5e9', options: ['Flexible Credit', 'Smart Mobility', 'Protection & Support', 'Everyday Payments'] },
