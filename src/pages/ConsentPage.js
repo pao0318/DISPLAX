@@ -30,9 +30,7 @@ const ConsentPage = () => {
       <div className="consent-content">
         {/* Waveform animation */}
         <div className="waveform-container">
-          <svg className="waveform" viewBox="0 0 400 100" preserveAspectRatio="none">
-            <path className="waveform-path" d="M0,50 Q10,30 20,50 T40,50 T60,50 T80,50 T100,50 T120,50 T140,50 T160,50 T180,50 T200,50 T220,50 T240,50 T260,50 T280,50 T300,50 T320,50 T340,50 T360,50 T380,50 T400,50" />
-          </svg>
+          <img src="/assets/Wave.svg"/>
         </div>
 
         {/* Question */}
