@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './App.css';
 
 // Import components
 import MapCanvas from './components/MapCanvas';
 import DraggableObject from './components/DraggableObject';
-import ObjectOptions from './components/ObjectOptions';
 
 // Import services
 import { getAllObjects, updateObjectPosition } from './services/dataService';
@@ -13,8 +12,6 @@ function App() {
   // State for objects and active object
   const [objects, setObjects] = useState([]);
   const [activeObject, setActiveObject] = useState(null);
-  const [showOptions, setShowOptions] = useState(false);
-  const [isAnimatingOut, setIsAnimatingOut] = useState(false);
   const [showHelp, setShowHelp] = useState(true);
   
   // Load objects on component mount - only once
@@ -34,27 +31,10 @@ function App() {
   
   // Memoize handlers for better performance
   
-  // Handle object click - memoized to prevent recreation on each render
+  // Handle object click - toggles active object for options visibility inside DraggableObject
   const handleObjectClick = useCallback((object) => {
-    // If we're already showing options for this object, start the hide animation
-    if (activeObject?.id === object.id && showOptions && !isAnimatingOut) {
-      setIsAnimatingOut(true);
-      // The actual hiding of options will happen after animation completes
-    } else {
-      // If we're showing options for a different object or no options at all
-      setActiveObject(object);
-      setShowOptions(true);
-      setIsAnimatingOut(false);
-    }
-  }, [activeObject, showOptions, isAnimatingOut]);
-  
-  // Handle animation completion
-  const handleAnimationComplete = useCallback(() => {
-    if (isAnimatingOut) {
-      setShowOptions(false);
-      setIsAnimatingOut(false);
-    }
-  }, [isAnimatingOut]);
+    setActiveObject(prev => (prev?.id === object.id ? null : object));
+  }, []);
   
   // Handle object drag - memoized with useCallback
   const handleObjectDrag = useCallback((id, position) => {
@@ -90,21 +70,13 @@ function App() {
         <DraggableObject
           key={object.id}
           object={object}
+          options={object.options}
+          onOptionSelect={handleOptionSelect}
           onDrag={handleObjectDrag}
           onClick={handleObjectClick}
           isActive={activeObject?.id === object.id}
         />
       ))}
-      
-      {/* Options for active object */}
-      {(showOptions || isAnimatingOut) && activeObject && (
-        <ObjectOptions 
-          object={activeObject}
-          onOptionSelect={handleOptionSelect}
-          isVisible={!isAnimatingOut}
-          onAnimationComplete={handleAnimationComplete}
-        />
-      )}
       
       {/* Help tooltip */}
       {showHelp && (

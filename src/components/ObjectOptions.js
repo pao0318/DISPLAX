@@ -1,4 +1,4 @@
-import React, { useMemo, memo, useState, useEffect } from 'react';
+import React, { useMemo, memo, useState, useEffect, useCallback } from 'react';
 
 /**
  * ObjectOptions component that displays options in a circle around an object
@@ -12,24 +12,23 @@ const ObjectOptions = memo(({ object, onOptionSelect, isVisible = true, onAnimat
   // State to track animation state
   const [animationState, setAnimationState] = useState(isVisible ? 'appearing' : 'idle');
   
-  // Handle visibility changes
+  // Handle visibility changes with functional update to avoid adding animationState to deps
   useEffect(() => {
-    if (isVisible) {
-      setAnimationState('appearing');
-    } else if (animationState !== 'idle') {
-      setAnimationState('disappearing');
-    }
+    setAnimationState(prev => {
+      if (isVisible) return 'appearing';
+      return prev !== 'idle' ? 'disappearing' : prev;
+    });
   }, [isVisible]);
   
   // Handle animation end
-  const handleAnimationEnd = () => {
+  const handleAnimationEnd = useCallback(() => {
     if (animationState === 'disappearing') {
       setAnimationState('idle');
       if (onAnimationComplete) {
         onAnimationComplete();
       }
     }
-  };
+  }, [animationState, onAnimationComplete]);
   
   // Pre-calculate option positions - memoized to avoid recalculation on re-renders
   const optionElements = useMemo(() => {
@@ -76,7 +75,7 @@ const ObjectOptions = memo(({ object, onOptionSelect, isVisible = true, onAnimat
         </div>
       );
     });
-  }, [object?.id, object?.options, onOptionSelect, animationState]);
+  }, [object, onOptionSelect, animationState, handleAnimationEnd]);
   
   // If there's no object or options, don't render anything
   if (!object || !object.options || object.options.length === 0) return null;

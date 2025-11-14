@@ -52,9 +52,11 @@ export const getObjectOptions = (id) => {
   return object ? object.options : [];
 };
 
-export default {
+const dataService = {
   getAllObjects,
   getObjectById,
   updateObjectPosition,
   getObjectOptions
 };
+
+export default dataService;

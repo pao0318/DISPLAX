@@ -1,4 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback, memo } from 'react';
+import { createPortal } from 'react-dom';
+import ObjectOptions from './ObjectOptions';
 
 /**
  * DraggableObject component that can be dragged around the canvas
@@ -7,14 +9,18 @@ import React, { useState, useRef, useEffect, useCallback, memo } from 'react';
  * @param {Function} props.onDrag - Called when object is dragged with new position
  * @param {Function} props.onClick - Called when object is clicked
  * @param {boolean} props.isActive - Whether the object is currently active
+ * @param {Array} props.options - Optional list of options for this object
+ * @param {Function} props.onOptionSelect - Callback when an option is selected
  */
-const DraggableObject = memo(({ object, onDrag, onClick, isActive }) => {
+const DraggableObject = memo(({ object, onDrag, onClick, isActive, options, onOptionSelect }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [position, setPosition] = useState({ x: object.x, y: object.y });
   const objectRef = useRef(null);
   const offsetRef = useRef({ x: 0, y: 0 });
   const frameRef = useRef();
   const lastPositionRef = useRef({ x: object.x, y: object.y });
+  const [optionsVisible, setOptionsVisible] = useState(false);
+  const [isAnimatingOut, setIsAnimatingOut] = useState(false);
   
   // Handle mouse down
   const handleMouseDown = useCallback((e) => {
@@ -103,7 +109,17 @@ const DraggableObject = memo(({ object, onDrag, onClick, isActive }) => {
       lastPositionRef.current = { x: object.x, y: object.y };
     }
   }, [object.x, object.y, isDragging]);
-  
+
+  // Manage options visibility based on isActive, with disappear animation
+  useEffect(() => {
+    if (isActive) {
+      setOptionsVisible(true);
+      setIsAnimatingOut(false);
+    } else if (optionsVisible) {
+      setIsAnimatingOut(true);
+    }
+  }, [isActive, optionsVisible]);
+
   // Use CSS transform for better performance
   const style = {
     position: 'absolute',
@@ -118,19 +134,45 @@ const DraggableObject = memo(({ object, onDrag, onClick, isActive }) => {
     willChange: isDragging ? 'left, top' : 'auto', // Hint to browser for optimization
     touchAction: 'none', // Disable browser handling of touch gestures
   };
-  
+
+  // Prepare data for options rendering via portal
+  const appContainer = typeof document !== 'undefined' ? document.querySelector('.App') : null;
+  const optionsList = options ?? object.options ?? [];
+  const objectForOptions = { ...object, x: position.x, y: position.y, options: optionsList };
+
+  const handleOptionsAnimationComplete = useCallback(() => {
+    if (isAnimatingOut) {
+      setOptionsVisible(false);
+      setIsAnimatingOut(false);
+    }
+  }, [isAnimatingOut]);
+
   return (
-    <div 
-      ref={objectRef}
-      className={`absolute rounded-full cursor-grab ${isDragging ? 'cursor-grabbing' : ''} ${isActive && !isDragging ? 'pulse' : ''}`}
-      style={style}
-      onMouseDown={handleMouseDown}
-      onTouchStart={handleMouseDown}
-    >
-      <div className="flex items-center justify-center h-full text-white font-bold">
-        {object.name.charAt(0)}
+    <>
+      <div 
+        ref={objectRef}
+        className={`absolute rounded-full cursor-grab ${isDragging ? 'cursor-grabbing' : ''} ${isActive && !isDragging ? 'pulse' : ''}`}
+        style={style}
+        onMouseDown={handleMouseDown}
+        onTouchStart={handleMouseDown}
+      >
+        <div className="flex items-center justify-center h-full text-white font-bold">
+          {object.name.charAt(0)}
+        </div>
       </div>
-    </div>
+
+      {(optionsVisible || isAnimatingOut) && appContainer && createPortal(
+        (
+          <ObjectOptions
+            object={objectForOptions}
+            onOptionSelect={onOptionSelect}
+            isVisible={!isAnimatingOut}
+            onAnimationComplete={handleOptionsAnimationComplete}
+          />
+        ),
+        appContainer
+      )}
+    </>
   );
 });
 
