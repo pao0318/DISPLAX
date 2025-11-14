@@ -125,11 +125,8 @@ const DraggableObject = memo(({ object, onDrag, onClick, isActive, options, onOp
     position: 'absolute',
     left: `${position.x * 100}%`,
     top: `${position.y * 100}%`,
-    backgroundColor: object.color,
-    width: '60px',
-    height: '60px',
+    backgroundColor: 'transparent',
     transform: 'translate(-50%, -50%)',
-    boxShadow: isActive ? '0 0 20px rgba(103, 232, 249, 0.7)' : '0 0 10px rgba(0, 0, 0, 0.3)',
     zIndex: isActive ? 10 : 1,
     willChange: isDragging ? 'left, top' : 'auto', // Hint to browser for optimization
     touchAction: 'none', // Disable browser handling of touch gestures
@@ -156,8 +153,20 @@ const DraggableObject = memo(({ object, onDrag, onClick, isActive, options, onOp
         onMouseDown={handleMouseDown}
         onTouchStart={handleMouseDown}
       >
-        <div className="flex items-center justify-center h-full text-white font-bold">
-          {object.name.charAt(0)}
+        <div className="flex items-center justify-center h-full w-full text-white">
+          {object.icon ? (
+            <img 
+              src={`/assets/${object.icon}.svg`} 
+              alt={object.name} 
+              className="object-contain" 
+              style={{ 
+                opacity: 1,
+                transform: 'scale(0.4)',
+              }} 
+            />
+          ) : (
+            <span className="font-bold">{object.name.charAt(0)}</span>
+          )}
         </div>
       </div>
 

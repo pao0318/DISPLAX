@@ -3,24 +3,84 @@ export const initialMockData = {
   "timestamp": 1731515803,
   "objects": [
     {
+      "id": 1,
+      "name": "Hospital",
+      "type": "hospital",
       "sessionID": 12,
       "fiducialID": 42,
-      "x": 0.623,
-      "y": 0.381,
-      "angle": 1.5708,
+      "x": 0.7,
+      "y": 0.3,
+      "angle": 0,
       "motionSpeed": 0.008,
       "rotationSpeed": 0.003,
       "motionAccel": 0.002,
       "rotationAccel": 0.001,
-      "state": "update"
+      "color": "#06b6d4",
+      "icon": "Car",
+      "state": "update",
+      "options": [
+        { "id": 1, "label": "Patient Records", "description": "Access and manage patient medical history" },
+        { "id": 2, "label": "Medical Billing", "description": "Process insurance claims and payments" },
+        { "id": 3, "label": "Healthcare Analytics", "description": "Analyze patient data and treatment outcomes" },
+        { "id": 4, "label": "Telemedicine", "description": "Remote patient consultations" }
+      ]
     },
     {
+      "id": 2,
+      "name": "Bank",
+      "type": "bank",
       "sessionID": 13,
       "fiducialID": 8,
-      "x": 0.271,
-      "y": 0.642,
-      "angle": 0.0,
-      "state": "new"
+      "x": 0.3,
+      "y": 0.6,
+      "angle": 0,
+      "color": "#0ea5e9",
+      "icon": "coffee",
+      "state": "new",
+      "options": [
+        { "id": 1, "label": "Flexible Credit", "description": "Personalized loan options" },
+        { "id": 2, "label": "Smart Mobility", "description": "Transportation financing solutions" },
+        { "id": 3, "label": "Protection & Support", "description": "Insurance and security services" },
+        { "id": 4, "label": "Everyday Payments", "description": "Digital payment solutions" }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Store",
+      "type": "store",
+      "sessionID": 14,
+      "fiducialID": 15,
+      "x": 0.5,
+      "y": 0.7,
+      "angle": 0,
+      "color": "#0891b2",
+      "icon": "cart",
+      "state": "update",
+      "options": [
+        { "id": 1, "label": "Inventory Management", "description": "Track and optimize product inventory" },
+        { "id": 2, "label": "Customer Insights", "description": "Analyze customer behavior and preferences" },
+        { "id": 3, "label": "Payment Solutions", "description": "Integrated payment processing" },
+        { "id": 4, "label": "Loyalty Programs", "description": "Customer retention strategies" }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Gas Station",
+      "type": "gas",
+      "sessionID": 15,
+      "fiducialID": 22,
+      "x": 0.2,
+      "y": 0.4,
+      "angle": 0,
+      "color": "#0e7490",
+      "icon": "petrolpump",
+      "state": "new",
+      "options": [
+        { "id": 1, "label": "Fuel Analytics", "description": "Monitor and optimize fuel consumption" },
+        { "id": 2, "label": "Fleet Management", "description": "Track and manage vehicle fleets" },
+        { "id": 3, "label": "Carbon Tracking", "description": "Monitor and reduce carbon footprint" },
+        { "id": 4, "label": "Maintenance Alerts", "description": "Predictive vehicle maintenance" }
+      ]
     }
   ],
   "touches": [

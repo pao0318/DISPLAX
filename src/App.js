@@ -4,6 +4,7 @@ import './App.css';
 // Import components
 import MapCanvas from './components/MapCanvas';
 import DraggableObject from './components/DraggableObject';
+import ObjectOptions from './components/ObjectOptions';
 
 // Import services
 import { getAllObjects, updateObjectPosition } from './services/dataService';
@@ -13,6 +14,29 @@ function App() {
   const [objects, setObjects] = useState([]);
   const [activeObject, setActiveObject] = useState(null);
   const [showHelp, setShowHelp] = useState(true);
+  
+  // State for center car options
+  const [showCenterOptions, setShowCenterOptions] = useState(false);
+  const [isAnimatingOut, setIsAnimatingOut] = useState(false);
+  
+  // Define the main car object in the center (not part of draggable objects)
+  const centerCarObject = {
+    id: 'center-car',
+    name: 'Car',
+    type: 'car',
+    x: 0.5,
+    y: 0.5,
+    angle: 0,
+    color: '#06b6d4',
+    icon: 'Car',
+    options: [
+      { id: 1, label: 'Driving Insights', description: 'View your driving analytics' },
+      { id: 2, label: 'Vehicle Finance Overview', description: 'Check your payment status' },
+      { id: 3, label: 'Eco Rewards Dashboard', description: 'See your environmental impact' },
+      { id: 4, label: 'Predictive Finance AI', description: 'Get AI-powered recommendations' },
+      { id: 5, label: 'My Journey Summary', description: 'Review your recent trips' }
+    ]
+  };
   
   // Load objects on component mount - only once
   useEffect(() => {
@@ -29,7 +53,23 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
   
-  // Memoize handlers for better performance
+  // Handle center car click to toggle options
+  const handleCarClick = useCallback(() => {
+    if (showCenterOptions && !isAnimatingOut) {
+      setIsAnimatingOut(true);
+    } else {
+      setShowCenterOptions(true);
+      setIsAnimatingOut(false);
+    }
+  }, [showCenterOptions, isAnimatingOut]);
+  
+  // Handle animation completion
+  const handleAnimationComplete = useCallback(() => {
+    if (isAnimatingOut) {
+      setShowCenterOptions(false);
+      setIsAnimatingOut(false);
+    }
+  }, [isAnimatingOut]);
   
   // Handle object click - toggles active object for options visibility inside DraggableObject
   const handleObjectClick = useCallback((object) => {
@@ -54,9 +94,9 @@ function App() {
     updateObjectPosition(id, position);
   }, []);
   
-  // Handle option selection - memoized with useCallback
+  // Handle option selection
   const handleOptionSelect = useCallback((objectId, option) => {
-    console.log(`Selected ${option.label} for object ${objectId}`);
+    console.log(`Selected ${option.label}`);
     // Here you would handle the action for each option
   }, []);
   
@@ -65,7 +105,7 @@ function App() {
       {/* Map background */}
       <MapCanvas mapSrc="/assets/map.svg" />
       
-      {/* Draggable objects */}
+      {/* Draggable objects on the map */}
       {objects.map(object => (
         <DraggableObject
           key={object.id}
@@ -78,17 +118,19 @@ function App() {
         />
       ))}
       
+
+      
       {/* Help tooltip */}
       {showHelp && (
         <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-gray-800/80 text-white px-4 py-2 rounded-lg shadow-lg text-center">
           <p className="font-bold mb-1">How to interact:</p>
           <p className="text-sm">🖱️ Click and drag to move objects</p>
-          <p className="text-sm">🔄 Click an object to show options</p>
+          <p className="text-sm">🔄 Click center car to show options</p>
         </div>
       )}
       
       {/* EY Logo */}
-      <div className="absolute bottom-4 right-4 w-24">
+      <div className="absolute bottom-4 right-4 w-24 pointer-events-auto">
         <img src="/assets/EY_Logo_Beam_STFWC_Stacked_RGB_White_Yellow_EN 2.svg" alt="EY Logo" />
       </div>
       
