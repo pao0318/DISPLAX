@@ -1,0 +1,70 @@
+{
+  "frame": 1043,
+  "timestamp": 1731515803,
+  "objects": [
+    {
+      "id": 1,
+      "name": "Hospital",
+      "type": "hospital",
+      "x": 0.7,
+      "y": 0.3,
+      "angle": 0,
+      "color": "#06b6d4",
+      "icon": "hospital",
+      "options": [
+        { "id": 1, "label": "Patient Records", "description": "Access and manage patient medical history" },
+        { "id": 2, "label": "Medical Billing", "description": "Process insurance claims and payments" },
+        { "id": 3, "label": "Healthcare Analytics", "description": "Analyze patient data and treatment outcomes" },
+        { "id": 4, "label": "Telemedicine", "description": "Remote patient consultations" }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Bank",
+      "type": "bank",
+      "x": 0.3,
+      "y": 0.6,
+      "angle": 0,
+      "color": "#0ea5e9",
+      "icon": "bank",
+      "options": [
+        { "id": 1, "label": "Flexible Credit", "description": "Personalized loan options" },
+        { "id": 2, "label": "Smart Mobility", "description": "Transportation financing solutions" },
+        { "id": 3, "label": "Protection & Support", "description": "Insurance and security services" },
+        { "id": 4, "label": "Everyday Payments", "description": "Digital payment solutions" }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Store",
+      "type": "store",
+      "x": 0.5,
+      "y": 0.7,
+      "angle": 0,
+      "color": "#0891b2",
+      "icon": "store",
+      "options": [
+        { "id": 1, "label": "Inventory Management", "description": "Track and optimize product inventory" },
+        { "id": 2, "label": "Customer Insights", "description": "Analyze customer behavior and preferences" },
+        { "id": 3, "label": "Payment Solutions", "description": "Integrated payment processing" },
+        { "id": 4, "label": "Loyalty Programs", "description": "Customer retention strategies" }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Gas Station",
+      "type": "gas",
+      "x": 0.2,
+      "y": 0.4,
+      "angle": 0,
+      "color": "#0e7490",
+      "icon": "gas",
+      "options": [
+        { "id": 1, "label": "Fuel Analytics", "description": "Monitor and optimize fuel consumption" },
+        { "id": 2, "label": "Fleet Management", "description": "Track and manage vehicle fleets" },
+        { "id": 3, "label": "Carbon Tracking", "description": "Monitor and reduce carbon footprint" },
+        { "id": 4, "label": "Maintenance Alerts", "description": "Predictive vehicle maintenance" }
+      ]
+    }
+  ]
+}

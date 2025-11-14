@@ -9,12 +9,15 @@ body {
   overflow: hidden;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   background-color: #1a202c;
+  touch-action: none; /* Prevent browser handling of touch gestures */
 }
 
 .App {
   width: 100vw;
   height: 100vh;
   position: relative;
+  overflow: hidden;
+  will-change: transform; /* Hint to browser to optimize */
 }
 
 canvas {
@@ -23,9 +26,10 @@ canvas {
   left: 0;
   width: 100%;
   height: 100%;
+  touch-action: none;
 }
 
-/* Animation for pulsing effect */
+/* Animation for pulsing effect - optimized for performance */
 @keyframes pulse {
   0% {
     transform: translate(-50%, -50%) scale(1);
@@ -43,12 +47,39 @@ canvas {
 
 .pulse {
   animation: pulse 2s infinite ease-in-out;
+  will-change: transform, opacity; /* Hint to browser to optimize */
 }
 
-/* Animation for option appearance */
+/* Animation for option appearance - optimized for performance */
 @keyframes fadeIn {
   from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
   to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+/* Option item styles */
+.option-item {
+  width: 50px;
+  height: 50px;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 10px rgba(103, 232, 249, 0.5);
+  animation: fadeIn 0.3s forwards;
+  opacity: 0; /* Start invisible for animation */
+  will-change: transform, opacity; /* Hint to browser to optimize */
+  pointer-events: auto; /* Make clickable */
+}
+
+/* Option label styles */
+.option-label {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 5px;
+  pointer-events: none; /* Prevent clicks on labels */
+}
+
+/* Options container */
+.options-container {
+  pointer-events: none; /* Let clicks pass through the container */
 }
 
 /* Tailwind-like utility classes */
@@ -84,6 +115,14 @@ canvas {
   cursor: pointer;
 }
 
+.cursor-grab {
+  cursor: grab;
+}
+
+.cursor-grabbing {
+  cursor: grabbing;
+}
+
 .transition-all {
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -95,6 +134,10 @@ canvas {
 
 .text-white {
   color: white;
+}
+
+.text-gray-400 {
+  color: #9ca3af;
 }
 
 .text-xs {
@@ -136,4 +179,20 @@ canvas {
 
 .z-20 {
   z-index: 20;
+}
+
+.transform {
+  transform: translateX(-50%);
+}
+
+.mb-1 {
+  margin-bottom: 0.25rem;
+}
+
+/* For mobile devices */
+@media (max-width: 768px) {
+  .option-item {
+    width: 40px;
+    height: 40px;
+  }
 }
