@@ -10,6 +10,7 @@ export default function App() {
     { id: 2, label: 'Vehicle Finance Overview' },
     { id: 3, label: 'Eco Rewards Dashboard' },
     { id: 4, label: 'Predictive Finance AI' }
+    
   ];
   
   // Handle option selection
