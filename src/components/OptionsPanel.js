@@ -23,7 +23,7 @@ const OptionsPanel = memo(({ option, objectName, onClose }) => {
 
   const [metrics] = useState(generateMetrics());
 
-  // Handle drag start
+  // Handle drag 
   const handleDragStart = useCallback((e) => {
     if (e.target.closest('.close-btn')) return;
     
