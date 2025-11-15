@@ -12,10 +12,11 @@
       "color": "#06b6d4",
       "icon": "Car",
       "options": [
-        { "id": 1, "label": "Patient Records", "description": "Access and manage patient medical history" },
-        { "id": 2, "label": "Medical Billing", "description": "Process insurance claims and payments" },
-        { "id": 3, "label": "Healthcare Analytics", "description": "Analyze patient data and treatment outcomes" },
-        { "id": 4, "label": "Telemedicine", "description": "Remote patient consultations" }
+        { "id": 1, "label": "Driving Insights", "description": "Real-time driving analytics and performance metrics" },
+        { "id": 2, "label": "Vehicle Finance Overview", "description": "Comprehensive vehicle financing and loan management" },
+        { "id": 3, "label": "Eco Rewards Dashboard", "description": "Track eco-friendly driving and earn rewards" },
+        { "id": 4, "label": "Predictive Finance AI", "description": "AI-powered financial predictions and recommendations" },
+        { "id": 5, "label": "My Journey Summary", "description": "Detailed trip history and journey analytics" }
       ]
     },
     {

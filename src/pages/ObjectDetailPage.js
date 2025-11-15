@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import '../styles/ObjectDetailPage.css';
+import ModalImage from '../components/ModalImage';
 
 /**
  * ObjectDetailPage - Shows a single selected object on a canvas with map-3.svg background
@@ -12,6 +13,9 @@ const ObjectDetailPage = () => {
   const [isDraggingIcon, setIsDraggingIcon] = useState(false);
   const [iconPosition, setIconPosition] = useState({ x: 0, y: 0 });
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [iconRotation, setIconRotation] = useState(0);
+  const [showOptions, setShowOptions] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const canvasRef = useRef(null);
   const mapImageRef = useRef(null);
   const resizeTimeoutRef = useRef(null);
@@ -147,6 +151,24 @@ const ObjectDetailPage = () => {
     navigate('/canvas');
   };
 
+  const handleOptionClick = (optionLabel) => {
+    // Hardcoded for Eco Rewards Dashboard
+    if (optionLabel === 'Eco Rewards Dashboard') {
+      setShowModal(true);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  const handleIconClick = useCallback((e) => {
+    if (isDraggingIcon) return;
+    e.stopPropagation();
+    setIconRotation(prev => prev + 90);
+    setShowOptions(prev => !prev);
+  }, [isDraggingIcon]);
+
   const handleIconMouseDown = useCallback((e) => {
     e.preventDefault();
     const iconRect = iconRef.current?.getBoundingClientRect();
@@ -218,58 +240,78 @@ const ObjectDetailPage = () => {
         className="object-detail-container"
         ref={containerRef}
         style={{
-          position: iconPosition.x !== 0 || iconPosition.y !== 0 ? 'fixed' : 'relative',
-          left: iconPosition.x !== 0 || iconPosition.y !== 0 ? `${iconPosition.x}px` : 'auto',
-          top: iconPosition.y !== 0 || iconPosition.y !== 0 ? `${iconPosition.y}px` : 'auto',
+          left: iconPosition.x !== 0 || iconPosition.y !== 0 ? `${iconPosition.x}px` : '5%',
+          top: iconPosition.x !== 0 || iconPosition.y !== 0 ? `${iconPosition.y}px` : 'auto',
+          bottom: iconPosition.x !== 0 || iconPosition.y !== 0 ? 'auto' : '5%',
           transform: iconPosition.x !== 0 || iconPosition.y !== 0 ? 'translate(-50%, -50%)' : 'none',
           zIndex: isDraggingIcon ? 100 : 10,
         }}
       >
-        {/* Central icon - draggable */}
-        <div
-          ref={iconRef}
-          className={`object-detail-icon ${isDraggingIcon ? 'dragging' : ''}`}
-          onMouseDown={handleIconMouseDown}
-          style={{
-            position: 'relative',
-            left: 'auto',
-            top: 'auto',
-          }}
-        >
-          {object.icon ? (
-            <img
-              src={`/assets/${object.icon}.svg`}
-              alt={object.name}
-              className="object-detail-image"
-            />
-          ) : (
-            <span className="object-detail-text">{object.name.charAt(0)}</span>
+        {/* Wrapper for icon and options - scale this to resize everything */}
+        <div className="object-detail-wrapper">
+          {/* Central icon - draggable */}
+          <div
+            ref={iconRef}
+            className={`object-detail-icon ${isDraggingIcon ? 'dragging' : ''}`}
+            onMouseDown={handleIconMouseDown}
+            onClick={handleIconClick}
+            style={{
+              position: 'relative',
+              left: 'auto',
+              top: 'auto',
+              transform: `rotate(${iconRotation}deg)`,
+              transition: isDraggingIcon ? 'none' : 'transform 0.3s ease',
+            }}
+          >
+            {object.icon ? (
+              <img
+                src={`/assets/${object.icon}.svg`}
+                alt={object.name}
+                className="object-detail-image"
+              />
+            ) : (
+              <span className="object-detail-text">{object.name.charAt(0)}</span>
+            )}
+          </div>
+
+          {/* Circular arc options on the right side */}
+          {object.options && object.options.length > 0 && (
+            <div className={`object-detail-options-circle ${showOptions ? 'visible' : 'hidden'}`}>
+              {object.options.map((option, index) => {
+                const totalOptions = object.options.length;
+                // Arrange in a semicircle on the right side (0 to 180 degrees)
+                const angle = (index / (totalOptions - 1)) * 180 - 90; // -90 to 90 degrees
+                const radius = 150; // Distance from center to option center
+                const x = Math.cos((angle * Math.PI) / 180) * radius;
+                const y = Math.sin((angle * Math.PI) / 180) * radius;
+                return (
+                  <div
+                    key={index}
+                    className="object-detail-option-badge"
+                    style={{
+                      '--index': index,
+                      transform: `translateX(${x}px) translateY(${y}px)`,
+                    }}
+                    onClick={() => handleOptionClick(option.label)}
+                  >
+                    <div className="object-detail-option-content">
+                      <span className="object-detail-option-label">{option.label}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           )}
         </div>
-
-        {/* Circular options around the center */}
-        {object.options && object.options.length > 0 && (
-          <div className="object-detail-options-circle">
-            {object.options.map((option, index) => {
-              const totalOptions = object.options.length;
-              const angle = (index / totalOptions) * 360;
-              return (
-                <div
-                  key={index}
-                  className="object-detail-option-badge"
-                  style={{
-                    '--angle': `${angle}deg`,
-                  }}
-                >
-                  <div className="object-detail-option-content">
-                    <span className="object-detail-option-label">{option.label}</span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
       </div>
+
+      {/* Modal Image Component */}
+      <ModalImage
+        isOpen={showModal}
+        onClose={handleCloseModal}
+        imageSrc="/assets/modal.png"
+        title="Eco Rewards Dashboard"
+      />
 
       {/* Back button */}
       <button className="object-detail-back-btn" onClick={handleBack}>
