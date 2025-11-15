@@ -115,10 +115,6 @@ const MapCanvas = memo(({ mapSrc }) => {
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'medium';
     
-    // Clear the canvas with background color
-    ctx.fillStyle = '#1a202c';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
     // Calculate aspect ratios for responsive scaling
     const canvasAspect = canvas.width / canvas.height;
     const imageAspect = mapImage.width / mapImage.height;
@@ -139,16 +135,9 @@ const MapCanvas = memo(({ mapSrc }) => {
     drawY = (canvas.height - drawHeight) / 2;
     
     // Draw the map as background, covering the entire canvas
-    ctx.globalAlpha = 0.6; // Make it slightly transparent
+    ctx.globalAlpha = 1.0; // Full opacity
     ctx.drawImage(mapImage, drawX, drawY, drawWidth, drawHeight);
     ctx.globalAlpha = 1.0;
-    
-    // Add a subtle overlay gradient for better readability
-    const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-    gradient.addColorStop(0, 'rgba(20, 30, 40, 0.7)');
-    gradient.addColorStop(1, 'rgba(40, 50, 60, 0.5)');
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
   };
   
   return (

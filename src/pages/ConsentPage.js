@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Box, Container } from '@mui/material';
 import '../styles/ConsentPage.css';
 
 /**
@@ -9,7 +10,7 @@ const ConsentPage = () => {
   const navigate = useNavigate();
 
   const handleYes = () => {
-    navigate('/car-center');
+    navigate('/canvas');
   };
 
   const handleNo = () => {
@@ -17,36 +18,38 @@ const ConsentPage = () => {
   };
 
   return (
-    <div className="consent-page">
+    <Box className="consent-page">
       {/* Background */}
-      <div className="consent-background">
-        <img src="/assets/map.svg" alt="Background" />
-      </div>
+      <Box className="consent-background">
+        <img src="/assets/map2-bg.svg" alt="Background" />
+      </Box>
 
       {/* Overlay */}
-      <div className="consent-overlay"></div>
+      <Box className="consent-overlay"></Box>
+
+      {/* Waveform animation */}
+      <Box className="waveform-container">
+        <img src="/assets/Wave.svg" alt="" aria-hidden="true" />
+      </Box>
 
       {/* Content */}
-      <div className="consent-content">
-        {/* Waveform animation */}
-        <div className="waveform-container">
-          <img src="/assets/Wave.svg" alt="" aria-hidden="true" />
-        </div>
+      <Container maxWidth="sm">
+        <Box className="consent-content">
+          {/* Question */}
+          <h2 className="consent-question">Do you consent?</h2>
 
-        {/* Question */}
-        <h2 className="consent-question">Do you consent?</h2>
-
-        {/* Buttons */}
-        <div className="consent-buttons">
-          <button className="consent-btn consent-yes" onClick={handleYes}>
-            <img src="/assets/Yes.png" alt="YES" className="consent-btn-img" />
-          </button>
-          <button className="consent-btn consent-no" onClick={handleNo}>
-            <img src="/assets/No.svg" alt="NO" className="consent-btn-img" />
-          </button>
-        </div>
-      </div>
-    </div>
+          {/* Buttons */}
+          <Box className="consent-buttons">
+            <button className="consent-btn consent-yes" onClick={handleYes}>
+              <img src="/assets/Yes.png" alt="YES" className="consent-btn-img" />
+            </button>
+            <button className="consent-btn consent-no" onClick={handleNo}>
+              <img src="/assets/No.svg" alt="NO" className="consent-btn-img" />
+            </button>
+          </Box>
+        </Box>
+      </Container>
+    </Box>
   );
 };
 

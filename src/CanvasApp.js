@@ -82,7 +82,7 @@ function CanvasApp() {
   return (
     <div className="App">
       {/* Map background */}
-      <MapCanvas mapSrc="/assets/map.svg" />
+      <MapCanvas mapSrc="/assets/map2-bg.svg" />
       
       {/* Draggable objects on the map */}
       {objects.map(object => (
@@ -98,30 +98,13 @@ function CanvasApp() {
       ))}
       
 
-      
-      {/* Help tooltip */}
-      {showHelp && (
-        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-gray-800/80 text-white px-4 py-2 rounded-lg shadow-lg text-center">
-          <p className="font-bold mb-1">How to interact:</p>
-          <p className="text-sm">🖱️ Click and drag to move objects</p>
-          <p className="text-sm">🔄 Click center car to show options</p>
-        </div>
-      )}
+  
       
       {/* EY Logo */}
-      <div className="absolute bottom-4 right-4 w-24 pointer-events-auto">
+      <div className="absolute bottom-8 right-10 w-24 pointer-events-auto">
         <img src="/assets/EY_Logo_Beam_STFWC_Stacked_RGB_White_Yellow_EN 2.svg" alt="EY Logo" />
       </div>
       
-      {/* Help button */}
-      <button 
-        className="absolute bottom-4 left-4 bg-gray-800/80 text-white p-2 rounded-full shadow-lg"
-        onClick={() => setShowHelp(prev => !prev)}
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      </button>
       
       {/* Options Panel */}
       {selectedOption && (

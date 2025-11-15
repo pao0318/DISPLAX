@@ -16,7 +16,7 @@ const HomePage = () => {
     <div className="home-page">
       {/* Background map image */}
       <div className="home-background">
-        <img src="/assets/1stPageBG.svg" alt="Map Background" />
+        <img src="/assets/map-0.svg" alt="Map Background" />
       </div>
 
       {/* Content container */}
@@ -28,13 +28,19 @@ const HomePage = () => {
 
         {/* Main text content */}
         <div className="home-text">
-          <h1 className="home-title">
-            Step into a seamless connected commerce experience where your purchases, preferences, and payments come together effortlessly.
-          </h1>
 
-          <p className="home-description">
+          <div className='home-tiles'>
+            <h1 className="home-title">
+            Step into a seamless connected commerce experience where your purchases, preferences, and payments come together effortlessly.
+
+          </h1>
+          <h1 className="home-title">
             This interface brings personalized offers, real-time inventory, and frictionless checkout into one unified view—designed for convenience, speed, and delight.
-          </p>
+
+          </h1>
+          </div>
+        
+          
         </div>
 
         {/* CTA Button */}

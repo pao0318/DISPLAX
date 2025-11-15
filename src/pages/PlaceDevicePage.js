@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Box, Container } from '@mui/material';
 import '../styles/PlaceDevicePage.css';
 
 /**
@@ -13,33 +14,41 @@ const PlaceDevicePage = () => {
   };
 
   return (
-    <div className="place-device-page">
+    <Box className="place-device-page">
       {/* Background */}
-      <div className="place-device-background">
-        <img src="/assets/1stPageBG.svg" alt="Background" />
-      </div>
+      <Box className="place-device-background">
+        <img src="/assets/map-1.svg" alt="Background" />
+      </Box>
 
-      {/* Overlay */}
-      <div className="place-device-overlay"></div>
+      {/* Content Container */}
+      <Container maxWidth="md">
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 3,
+            position: 'relative',
+            zIndex: 2,
+          }}
+        >
+          {/* Mobile frame with instruction */}
+          <Box className="place-device-frame-container">
+            <img src="/assets/mobile-frame.svg" alt="Mobile Frame" className="place-device-frame" />
+          </Box>
 
-      {/* Content */}
-      <div className="place-device-content">
-        {/* Mobile frame with instruction */}
-        <div className="place-device-frame-container">
-          <img src="/assets/mobile-frame.svg" alt="Mobile Frame" className="place-device-frame" />
-          
           {/* Place Device Here text/image */}
-          <div className="place-device-instruction">
+          <Box
+            className="place-device-instruction"
+            onClick={handleContinue}
+            sx={{ cursor: 'pointer' }}
+          >
             <img src="/assets/placeDeviceHere.svg" alt="Place Device Here" className="place-device-text" />
-          </div>
-        </div>
-
-        {/* Continue button */}
-        <button className="place-device-button" onClick={handleContinue}>
-          Continue
-        </button>
-      </div>
-    </div>
+          </Box>
+        </Box>
+      </Container>
+    </Box>
   );
 };
 
