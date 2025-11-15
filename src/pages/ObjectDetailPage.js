@@ -25,7 +25,16 @@ const ObjectDetailPage = () => {
   // Get the selected object from navigation state
   useEffect(() => {
     if (location.state?.object) {
-      setObject(location.state.object);
+      const obj = location.state.object;
+      setObject(obj);
+      
+      // Set initial position based on canvas coordinates (x, y are normalized 0-1)
+      // Convert to pixel positions on the screen
+      if (obj.x !== undefined && obj.y !== undefined) {
+        const x = obj.x * window.innerWidth;
+        const y = obj.y * window.innerHeight;
+        setIconPosition({ x, y });
+      }
     } else {
       // If no object is passed, go back to canvas
       navigate('/canvas');
@@ -240,10 +249,9 @@ const ObjectDetailPage = () => {
         className="object-detail-container"
         ref={containerRef}
         style={{
-          left: iconPosition.x !== 0 || iconPosition.y !== 0 ? `${iconPosition.x}px` : '5%',
-          top: iconPosition.x !== 0 || iconPosition.y !== 0 ? `${iconPosition.y}px` : 'auto',
-          bottom: iconPosition.x !== 0 || iconPosition.y !== 0 ? 'auto' : '5%',
-          transform: iconPosition.x !== 0 || iconPosition.y !== 0 ? 'translate(-50%, -50%)' : 'none',
+          left: `${iconPosition.x}px`,
+          top: `${iconPosition.y}px`,
+          transform: 'translate(-50%, -50%)',
           zIndex: isDraggingIcon ? 100 : 10,
         }}
       >
