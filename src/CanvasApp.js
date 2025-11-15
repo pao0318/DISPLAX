@@ -3,6 +3,7 @@ import './App.css';
 import MapCanvas from './components/MapCanvas';
 import DraggableObject from './components/DraggableObject';
 import OptionsPanel from './components/OptionsPanel';
+import DetailedModal from './components/DetailedModal';
 
 // Import services
 import { getAllObjects, updateObjectPosition } from './services/dataService';
@@ -14,9 +15,11 @@ function CanvasApp() {
   
   // State for center car options
   
-  // State for options panel
+  // State for options panel and modal
   const [selectedOption, setSelectedOption] = useState(null);
   const [selectedObjectName, setSelectedObjectName] = useState('');
+  const [showDetailedModal, setShowDetailedModal] = useState(false);
+  const [modalData, setModalData] = useState(null);
   
   // Define the main car object in the center (not part of draggable objects)
   
@@ -67,6 +70,7 @@ function CanvasApp() {
   // Handle option selection
   const handleOptionSelect = useCallback((objectId, option) => {
     console.log(`Selected ${option.label}`);
+    console.log("inside the handleOptionSelect function in canvasapp")
     
     // Find the object name
     let objName = 'Car';
@@ -77,7 +81,84 @@ function CanvasApp() {
     
     setSelectedOption(option);
     setSelectedObjectName(objName);
+    
+    // Generate modal data based on the selected option
+    const data = generateModalData(option, objName);
+    setModalData(data);
+    setShowDetailedModal(true);
   }, [objects]);
+  
+  // Generate modal data based on the selected option
+  const generateModalData = (option, objectName) => {
+    // Default metrics for car options
+    const defaultMetrics = {
+      'Driving Insights': [
+        { name: 'Electricity Quality', value: '30%', color: '#70CDDD' },
+        { name: 'Effective Acceleration', value: '45%', color: '#157B66' },
+        { name: 'Slow charging', value: '22%', color: '#00ABDA' },
+        { name: 'Braking Regeneration', value: '17%', color: '#467C94' },
+        { name: 'Speeding', value: '68%', color: '#04BB65' }
+      ],
+      'Vehicle Finance Overview': [
+        { name: 'Monthly Payment', value: '85%', color: '#70CDDD' },
+        { name: 'Interest Rate', value: '42%', color: '#157B66' },
+        { name: 'Loan Term', value: '65%', color: '#00ABDA' },
+        { name: 'Down Payment', value: '28%', color: '#467C94' },
+        { name: 'Total Cost', value: '73%', color: '#04BB65' }
+      ],
+      'Eco Rewards Dashboard': [
+        { name: 'Carbon Savings', value: '62%', color: '#70CDDD' },
+        { name: 'Energy Efficiency', value: '78%', color: '#157B66' },
+        { name: 'Green Miles', value: '54%', color: '#00ABDA' },
+        { name: 'Eco Score', value: '91%', color: '#467C94' },
+        { name: 'Rewards Points', value: '47%', color: '#04BB65' }
+      ],
+      'Predictive Finance AI': [
+        { name: 'Prediction Accuracy', value: '87%', color: '#70CDDD' },
+        { name: 'Cost Savings', value: '63%', color: '#157B66' },
+        { name: 'Future Value', value: '45%', color: '#00ABDA' },
+        { name: 'Risk Assessment', value: '72%', color: '#467C94' },
+        { name: 'AI Confidence', value: '89%', color: '#04BB65' }
+      ],
+      'My Journey Summary': [
+        { name: 'Distance Traveled', value: '76%', color: '#70CDDD' },
+        { name: 'Time Efficiency', value: '58%', color: '#157B66' },
+        { name: 'Route Optimization', value: '81%', color: '#00ABDA' },
+        { name: 'Fuel Efficiency', value: '64%', color: '#467C94' },
+        { name: 'Journey Score', value: '92%', color: '#04BB65' }
+      ]
+    };
+    
+    // Get metrics for this option or use default
+    const metrics = defaultMetrics[option.label] || [
+      { name: 'Performance', value: '75%', color: '#70CDDD' },
+      { name: 'Efficiency', value: '60%', color: '#157B66' },
+      { name: 'Reliability', value: '85%', color: '#00ABDA' },
+      { name: 'Cost', value: '45%', color: '#467C94' },
+      { name: 'Overall', value: '72%', color: '#04BB65' }
+    ];
+    
+    return {
+      title: option.label,
+      subtitle: option.description || `Detailed information for ${objectName}`,
+      badgeTitle: 'Green Champion',
+      badgeValue: '3000 pts',
+      metrics: metrics,
+      alert: {
+        title: 'You have been running on low charge.',
+        subtitle: 'Nearest charging station is 10 miles away.',
+        timeLeft: '30 min left'
+      },
+      tabs: [
+        'Overall',
+        'Speeding',
+        'Braking',
+        'Slow Charging',
+        'Effective Acceleration',
+        'Electricity Quality'
+      ]
+    };
+  };
   
   return (
     <div className="App">
@@ -123,14 +204,21 @@ function CanvasApp() {
         </svg>
       </button>
       
-      {/* Options Panel */}
-      {selectedOption && (
+      {/* Options Panel - Original panel */}
+      {selectedOption && !showDetailedModal && (
         <OptionsPanel
           option={selectedOption}
           objectName={selectedObjectName}
           onClose={() => setSelectedOption(null)}
         />
       )}
+      
+      {/* Detailed Modal - New modal with Figma design */}
+      <DetailedModal 
+        isOpen={showDetailedModal}
+        onClose={() => setShowDetailedModal(false)}
+        data={modalData}
+      />
     </div>
   );
 
