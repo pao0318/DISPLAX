@@ -1,35 +1,60 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import Lottie from 'lottie-react';
 import '../styles/largeScreenPages.css';
 
-/**
- * LargeScreenPage3 - Globe/Connection page
- */
 const LargeScreenPage3 = () => {
+  const [animationData, setAnimationData] = useState(null);
+
+  useEffect(() => {
+    // Fetch square animation from public/data/
+    fetch('/data/loading.json')
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        console.log('Animation data loaded successfully:', data);
+        setAnimationData(data);
+      })
+      .catch((err) => console.error('Error loading animation:', err));
+  }, []);
+
+
   return (
-    <div className="large-screen-page large-screen-page-dark">
-      {/* Header */}
-      <div className="large-screen-header">
-        <img src="/assets/Header.svg" alt="Header" className="header-img" />
+    <div style={{
+      width: '100vw',
+      height: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: '#1a1a1a',
+      gap: '40px',
+    }}>
+      <div style={{
+        width: '400px',
+        height: '400px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
+        {animationData ? (
+          <Lottie
+            animationData={animationData}
+            loop={true}
+            autoplay={true}
+            style={{
+              width: '100%',
+              height: '100%',
+            }}
+          />
+        ) : (
+          <p style={{ color: 'white', fontSize: '18px' }}>Loading animation...</p>
+        )}
       </div>
 
-      {/* Content */}
-      <div className="large-screen-content-center">
-        <h2 className="large-screen-title-center">Connecting your world...</h2>
-        
-        {/* Globe SVG */}
-        <div className="large-screen-globe-container">
-          <img src="/assets/Globe.svg" alt="Globe" className="globe-img" />
-        </div>
-
-        <p className="large-screen-description-center">
-          With your consent, your car, phone, and wearable securely share data with your bank.
-        </p>
-      </div>
-
-      {/* EY Logo */}
-      <div className="large-screen-footer-logo">
-        <img src="/assets/EY_Logo_Beam_STFWC_Stacked_RGB_White_Yellow_EN 2.svg" alt="EY Logo" />
-      </div>
     </div>
   );
 };
