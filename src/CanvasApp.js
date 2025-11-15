@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './App.css';
 import MapCanvas from './components/MapCanvas';
 import DraggableObject from './components/DraggableObject';
@@ -8,6 +9,7 @@ import OptionsPanel from './components/OptionsPanel';
 import { getAllObjects, updateObjectPosition } from './services/dataService';
 
 function CanvasApp() {
+  const navigate = useNavigate();
    const [objects, setObjects] = useState([]);
   const [activeObject, setActiveObject] = useState(null);
   const [showHelp, setShowHelp] = useState(true);
@@ -41,10 +43,10 @@ function CanvasApp() {
   // Handle animation completion
   
   
-  // Handle object click - toggles active object for options visibility inside DraggableObject
+  // Handle object click - navigate to detail page
   const handleObjectClick = useCallback((object) => {
-    setActiveObject(prev => (prev?.id === object.id ? null : object));
-  }, []);
+    navigate('/object-detail', { state: { object } });
+  }, [navigate]);
   
   // Handle object drag - memoized with useCallback
   const handleObjectDrag = useCallback((id, position) => {
@@ -83,6 +85,11 @@ function CanvasApp() {
     <div className="App">
       {/* Map background */}
       <MapCanvas mapSrc="/assets/map2-bg.svg" />
+      
+      {/* Half Menu at top middle */}
+      <div className="absolute top-0 left-1/2 transform -translate-x-1/2 pointer-events-auto">
+        <img src="/assets/half-menu.svg" alt="Menu" className="h-20" />
+      </div>
       
       {/* Draggable objects on the map */}
       {objects.map(object => (

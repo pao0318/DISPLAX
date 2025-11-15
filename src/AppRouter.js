@@ -4,6 +4,7 @@ import HomePage from './pages/HomePage';
 import PlaceDevicePage from './pages/PlaceDevicePage';
 import ConsentPage from './pages/ConsentPage';
 import CanvasApp from './CanvasApp';
+import ObjectDetailPage from './pages/ObjectDetailPage';
 import LargeScreenPage1 from './largeScreenPages/LargeScreenPage1';
 import LargeScreenPage2 from './largeScreenPages/LargeScreenPage2';
 import LargeScreenPage3 from './largeScreenPages/LargeScreenPage3';
@@ -19,6 +20,7 @@ function AppRouter() {
         <Route path="/place-device" element={<PlaceDevicePage />} />
         <Route path="/consent" element={<ConsentPage />} />
         <Route path="/canvas" element={<CanvasApp />} />
+        <Route path="/object-detail" element={<ObjectDetailPage />} />
         
         {/* Large Screen Routes */}
         <Route path="/largePages/page1" element={<LargeScreenPage1 />} />

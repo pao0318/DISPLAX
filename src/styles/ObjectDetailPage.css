@@ -1,0 +1,274 @@
+/* ObjectDetailPage Styles */
+
+.object-detail-page {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #1a202c;
+}
+
+.object-detail-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+/* Container for the selected object and options */
+.object-detail-container {
+  position: relative;
+  z-index: 10;
+  width: 500px;
+  height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Selected object icon - same as canvas style */
+.object-detail-icon {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(6, 182, 212, 0.4), rgba(6, 182, 212, 0.1));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(6, 182, 212, 0.6);
+  box-shadow: 0 0 30px rgba(6, 182, 212, 0.4), inset 0 0 20px rgba(6, 182, 212, 0.2);
+  animation: popUp 1.5s ease-out forwards;
+  position: relative;
+  z-index: 5;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  transition: all 0.2s ease;
+}
+
+.object-detail-icon:hover {
+  box-shadow: 0 0 40px rgba(6, 182, 212, 0.6), inset 0 0 20px rgba(6, 182, 212, 0.3);
+  border-color: rgba(6, 182, 212, 0.8);
+}
+
+.object-detail-icon.dragging {
+  cursor: grabbing;
+  background: radial-gradient(circle at 30% 30%, rgba(6, 182, 212, 0.6), rgba(6, 182, 212, 0.2));
+  border-color: rgba(6, 182, 212, 0.9);
+  box-shadow: 0 0 50px rgba(6, 182, 212, 0.8), inset 0 0 30px rgba(6, 182, 212, 0.4);
+}
+
+.object-detail-image {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  filter: invert(1) brightness(1.5);
+}
+
+.object-detail-text {
+  font-size: 48px;
+  font-weight: bold;
+  color: #06b6d4;
+}
+
+/* Circular options container */
+.object-detail-options-circle {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Individual option badge positioned in circle */
+.object-detail-option-badge {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: rgba(120, 120, 120, 0.7);
+  border: 2px solid rgba(6, 182, 212, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  transform: rotate(var(--angle)) translateY(-200px) rotate(calc(var(--angle) * -1));
+  animation: badgePopUp 1.5s ease-out forwards;
+  animation-delay: calc(0.1s * var(--index, 0));
+  user-select: none;
+}
+
+.object-detail-option-badge:hover {
+  background: rgba(120, 120, 120, 0.9);
+  border-color: rgba(6, 182, 212, 0.8);
+  box-shadow: 0 0 25px rgba(6, 182, 212, 0.5);
+  transform: rotate(var(--angle)) translateY(-200px) rotate(calc(var(--angle) * -1)) scale(1.1);
+}
+
+.object-detail-option-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 100%;
+  padding: 10px;
+}
+
+.object-detail-option-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  text-align: center;
+  line-height: 1.2;
+  word-break: break-word;
+}
+
+/* Back button */
+.object-detail-back-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 20;
+  background: rgba(6, 182, 212, 0.2);
+  border: 1px solid rgba(6, 182, 212, 0.4);
+  color: #06b6d4;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.object-detail-back-btn:hover {
+  background: rgba(6, 182, 212, 0.3);
+  border-color: rgba(6, 182, 212, 0.6);
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+}
+
+.object-detail-back-btn:active {
+  transform: scale(0.95);
+}
+
+/* Pop-up animation */
+@keyframes popUp {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Badge pop-up animation */
+@keyframes badgePopUp {
+  0% {
+    transform: rotate(var(--angle)) translateY(0) rotate(calc(var(--angle) * -1));
+    opacity: 0;
+  }
+  100% {
+    transform: rotate(var(--angle)) translateY(-200px) rotate(calc(var(--angle) * -1));
+    opacity: 1;
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .object-detail-container {
+    width: 400px;
+    height: 400px;
+  }
+
+  .object-detail-icon {
+    width: 120px;
+    height: 120px;
+  }
+
+  .object-detail-image {
+    width: 60px;
+    height: 60px;
+  }
+
+  .object-detail-option-badge {
+    width: 100px;
+    height: 100px;
+    transform: rotate(var(--angle)) translateY(-160px) rotate(calc(var(--angle) * -1));
+  }
+
+  @keyframes badgePopUp {
+    0% {
+      transform: rotate(var(--angle)) translateY(0) rotate(calc(var(--angle) * -1));
+      opacity: 0;
+    }
+    100% {
+      transform: rotate(var(--angle)) translateY(-160px) rotate(calc(var(--angle) * -1));
+      opacity: 1;
+    }
+  }
+
+  .object-detail-option-label {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .object-detail-container {
+    width: 300px;
+    height: 300px;
+  }
+
+  .object-detail-icon {
+    width: 100px;
+    height: 100px;
+  }
+
+  .object-detail-image {
+    width: 50px;
+    height: 50px;
+  }
+
+  .object-detail-option-badge {
+    width: 90px;
+    height: 90px;
+    transform: rotate(var(--angle)) translateY(-130px) rotate(calc(var(--angle) * -1));
+  }
+
+  @keyframes badgePopUp {
+    0% {
+      transform: rotate(var(--angle)) translateY(0) rotate(calc(var(--angle) * -1));
+      opacity: 0;
+    }
+    100% {
+      transform: rotate(var(--angle)) translateY(-130px) rotate(calc(var(--angle) * -1));
+      opacity: 1;
+    }
+  }
+
+  .object-detail-option-label {
+    font-size: 11px;
+  }
+
+  .object-detail-back-btn {
+    width: 40px;
+    height: 40px;
+    top: 15px;
+    left: 15px;
+  }
+}
