@@ -109,7 +109,7 @@ function CanvasApp() {
       )}
       
       {/* EY Logo */}
-      <div className="absolute bottom-4 right-4 w-24 pointer-events-auto">
+      <div className="absolute bottom-3 right-3 w-20 pointer-events-auto" style={{position:'fixed', bottom:'10px', right:'20px'}}>
         <img src="/assets/EY_Logo_Beam_STFWC_Stacked_RGB_White_Yellow_EN 2.svg" alt="EY Logo" />
       </div>
       

@@ -24,7 +24,7 @@ function AppRouter() {
         <Route path="/consent" element={<ConsentPage />} />
         <Route path="/car-center" element={<CarCenterPage />} />
         <Route path="/canvas" element={<CanvasApp />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
+        {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
       </Routes>
     </Router>
   );
